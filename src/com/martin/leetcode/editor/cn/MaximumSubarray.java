@@ -15,8 +15,8 @@
 
   
   package com.martin.leetcode.editor.cn;
-  
-  
+
+
   public class MaximumSubarray{
   
       public static void main(String[] args) {
@@ -26,7 +26,7 @@
       
       //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maxSubArray(int[] nums) {
+/*    public int maxSubArray(int[] nums) {
         int[] dp = new int[nums.length+1];
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < nums.length; i++) {
@@ -34,6 +34,14 @@ class Solution {
             if (max < dp[i+1]) {
                 max = dp[i+1];
             }
+        }
+        return max;
+    }*/
+    public int maxSubArray(int[] nums) {
+        int sum = Integer.MIN_VALUE, max = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            sum = Math.max(sum, 0) + nums[i];
+            if (max < sum) max = sum;
         }
         return max;
     }
