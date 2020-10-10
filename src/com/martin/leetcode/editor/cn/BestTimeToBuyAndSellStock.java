@@ -45,8 +45,8 @@ class Solution {
         dp[0][1] = prices[0];
         int max = Integer.MIN_VALUE;
         for (int i = 1; i < prices.length; i++) {
-            dp[i][0] = Math.max(prices[i] - dp[i-1][1], 0);
-            dp[i][1] = Math.min(dp[i-1][1], prices[i]);
+            dp[i][0] = Math.max(prices[i] - dp[i-1][1], 0); // the max profit at the i day
+            dp[i][1] = Math.min(dp[i-1][1], prices[i]); // the least sock price if want to hold by i day
             if (max < dp[i][0]) max = dp[i][0];
         }
         return max;
