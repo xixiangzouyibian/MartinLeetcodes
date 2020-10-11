@@ -29,7 +29,7 @@ public class BestTimeToBuyAndSellStockWithCooldown{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
         //0 不持有， 1 持有， 2 冷冻期
-    public int maxProfit(int[] prices) {
+/*    public int maxProfit(int[] prices) {
         if (prices.length <=1) return 0;
         int[][] dp = new int[prices.length][3];
         dp[0][0] = 0;
@@ -41,6 +41,20 @@ class Solution {
             dp[i][2] = dp[i-1][0];
         }
         return Math.max(dp[prices.length-1][0], dp[prices.length-1][2]);
+    }*/
+
+    public int maxProfit(int[] prices) {
+        if (prices.length <=1) return 0;
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            int pre = i - 2;
+            if (pre < 0) pre = 0;
+            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i-1][1], dp[pre][0] - prices[i]);
+        }
+        return dp[prices.length-1][0];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
