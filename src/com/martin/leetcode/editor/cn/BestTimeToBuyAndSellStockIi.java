@@ -53,6 +53,10 @@ public class BestTimeToBuyAndSellStockIi{
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+        /**
+         * 	执行耗时:5 ms,击败了14.59% 的Java用户
+         * 	内存消耗:39 MB,击败了24.07% 的Java用户
+         */
 /*    public int maxProfit(int[] prices) {
         if (prices.length <=1) return 0;
         int[][] dp = new int[prices.length][2];
@@ -65,7 +69,11 @@ class Solution {
         return dp[prices.length-1][0];
     }*/
 
-    public int maxProfit(int[] prices) {
+        /**
+         * 	执行耗时:2 ms,击败了29.43% 的Java用户
+         * 	内存消耗:39 MB,击败了26.42% 的Java用户
+         */
+/*    public int maxProfit(int[] prices) {
         if (prices.length <=1) return 0;
         int throw_stock_profit = 0;
         int hold_stock_profit = -prices[0];
@@ -75,6 +83,22 @@ class Solution {
             hold_stock_profit = Math.max(hold_stock_profit, pre_throw_stock_profit - prices[i]);
         }
         return throw_stock_profit;
+    }*/
+
+        /**
+         *	执行耗时:1 ms,击败了99.60% 的Java用户
+         * 	内存消耗:38.9 MB,击败了34.61% 的Java用户
+         */
+    public int maxProfit(int[] prices) {
+        if (prices.length <=1) return 0;
+        int pre = prices[0];
+        int max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            int diff = prices[i] - pre;
+            max += Math.max(diff, 0);
+            pre = prices[i];
+        }
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
