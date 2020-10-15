@@ -21,18 +21,19 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
-
 public class LongestIncreasingSubsequence{
 
     public static void main(String[] args) {
         Solution solution = new LongestIncreasingSubsequence().new Solution();
+//        System.out.println(solution.binSearch(new int[]{2, 5}, 3, 1));
+        System.out.println(solution.lengthOfLIS(new int[] {10,9,2,5,3,4}));
     }
 
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int lengthOfLIS(int[] nums) {
+
+/*    public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         int[] dp = new int[nums.length];
         int max = 1;
@@ -46,6 +47,31 @@ class Solution {
             if (max < dp[i]) max = dp[i];
         }
         return max;
+    }*/
+
+    public int lengthOfLIS(int[] nums) {
+        int[] top = new int[nums.length];
+        int lengthOfLIS = 0;
+        for (int num : nums) {
+            int index = binSearch(top, num, 0, lengthOfLIS);
+            if (index == lengthOfLIS) lengthOfLIS++;
+            top[index] = num;
+        }
+        return lengthOfLIS;
+    }
+
+    public int binSearch(int[] top, int num, int left, int right) {
+        while (left < right) {
+            int middle = (left + right) >> 1;
+            if (num > top[middle]) {
+                left = middle + 1;
+            } else if (num < top[middle]) {
+                right = middle;
+            } else {
+                right = middle;
+            }
+        }
+        return left;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
