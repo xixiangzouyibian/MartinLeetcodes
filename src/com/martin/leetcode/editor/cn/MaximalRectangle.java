@@ -17,6 +17,9 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class MaximalRectangle{
 
     public static void main(String[] args) {
@@ -30,7 +33,7 @@ public class MaximalRectangle{
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maximalRectangle(char[][] matrix) {
+/*    public int maximalRectangle(char[][] matrix) {
         if (matrix.length == 0) {
             return 0;
         }
@@ -57,6 +60,47 @@ class Solution {
             }
         }
         return maxArea;
+    }*/
+
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0) return 0;
+        int[] heights = new int[matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == '1') {
+                    heights[j] += 1;
+                } else {
+                    heights[j] = 0;
+                }
+            }
+            max = Math.max(max, largestRectangleArea(heights));
+        }
+        return max;
+    }
+
+    public int largestRectangleArea(int[] heights) {
+        Deque<Integer> stack = new ArrayDeque<>(heights.length);
+        stack.push(-1);
+        int max = 0;
+        for (int i = 0; i < heights.length; i++) {
+            int top = stack.peek() == -1 ? -1 : heights[stack.peek()];
+            if (heights[i] >= top) {
+                stack.push(i);
+                continue;
+            }
+            while (heights[i] < top) {
+                max = Math.max(max, heights[stack.pop()] * (i-stack.peek()-1));
+                top = stack.peek() == -1 ? -1 : heights[stack.peek()];
+            }
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            int index = stack.pop();
+            if (stack.isEmpty()) break;
+            max = Math.max(max, heights[index] * (heights.length-stack.peek()-1));
+        }
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
