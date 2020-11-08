@@ -69,14 +69,11 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 public class ReverseWordsInAString{
 
     public static void main(String[] args) {
         Solution solution = new ReverseWordsInAString().new Solution();
+        System.out.println(solution.reverseWords("  hello world!  "));
     }
 
 
@@ -110,12 +107,42 @@ class Solution {
         return reversed.toString();
     }*/
 
-    public String reverseWords(String s) {
+/*    public String reverseWords(String s) {
         s = s.trim();
         List<String> wordList = Arrays.asList(s.split("\\s+"));
         Collections.reverse(wordList);
         return String.join(" ", wordList);
+    }*/
+
+/*    public String reverseWords(String s) {
+        Deque<String> words = new ArrayDeque<>();
+        char[] chars = (s.trim() + " ").toCharArray();
+        int start = 0;
+        for (int i=0; i < chars.length; i++) {
+            if (chars[i] == ' ') {
+                words.offerFirst(String.copyValueOf(chars, start, i-start));
+                while (++i < chars.length && chars[i] == ' ');
+                start = i;
+            }
+        }
+        return String.join(" ", words);
+    }*/
+
+    public String reverseWords(String s) {
+        StringBuilder words = new StringBuilder();
+        reverseWords(s.trim(), words, false);
+        return words.toString();
     }
+
+    private void reverseWords(String s, StringBuilder words, boolean flag) {
+        if (s == null || s.length() == 0) return;
+        int cursor = 0;
+        while (++cursor < s.length() && s.charAt(cursor) != ' ');
+        reverseWords(s.substring(cursor).trim(), words, true);
+        words.append(s, 0, cursor);
+        if (flag) words.append(" ");
+    }
+
 
     // 1 deque
     // double pointers
