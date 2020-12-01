@@ -51,124 +51,79 @@ public class FindAllAnagramsInAString{
 
     public static void main(String[] args) {
         Solution solution = new FindAllAnagramsInAString().new Solution();
-        System.out.println(solution.findAnagrams("abab", "ab"));
+        System.out.println(solution.findAnagrams("cbaebabacd", "abc"));
     }
 
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+        /**
+         * 			执行耗时:16 ms,击败了50.50% 的Java用户
+         * 			内存消耗:39.4 MB,击败了84.56% 的Java用户
+         */
 /*    public List<Integer> findAnagrams(String s, String p) {
-        Map<Character, Integer> dic = new HashMap<>();
-        for (int i =0; i < p.length(); i++) {
-            if (!dic.containsKey(p.charAt(i))) {
-                dic.put(p.charAt(i), 1);
-            } else {
-                dic.put(p.charAt(i), dic.get(p.charAt(i))+1);
-            }
+        int[] dic = new int[26];
+        int[] window = new int[26];
+        List<Integer> res = new ArrayList<>();
+
+        if (s.length() == 0 || s.length() < p.length()) return res;
+
+        for (int i = 0; i < p.length(); i++) {
+            dic[p.charAt(i)-'a']++;
+            window[s.charAt(i)-'a']++;
         }
 
-        int section = p.length();
-        int start = 0;
-        List<Integer> res = new ArrayList<>();
-        boolean isAnagrams = true;
-        while (start+section <= s.length()) {
-            Map<Character, Integer> dicC = new HashMap<>(dic);
-            for (int j = start; j < start+section; j++) {
-                isAnagrams = (dicC.containsKey(s.charAt(j)) && dicC.get(s.charAt(j)) > 0) && isAnagrams;
-                if (!isAnagrams) break;
-                dicC.put(s.charAt(j), dicC.get(s.charAt(j))-1);
+        for (int i = 0; i < s.length()-p.length()+1; i++) {
+            if (Arrays.equals(dic, window)) res.add(i);
+
+            if (i+p.length() < s.length()) {
+                window[s.charAt(i)-'a']--;
+                window[s.charAt(i+p.length())-'a']++;
             }
-            if (isAnagrams) {
-                res.add(start);
-                int end = start+section-1;
-                while (++end < s.length() && s.charAt(end) == s.charAt(end-section)) res.add(++start);
-            }
-            isAnagrams = true;
-            ++start;
         }
         return res;
     }*/
 
-/*        public List<Integer> findAnagrams(String s, String p) {
+        /**
+         * 			执行耗时:10 ms,击败了64.88% 的Java用户
+         * 			内存消耗:39.6 MB,击败了73.83% 的Java用户
+         *
+         * 			执行耗时:7 ms,击败了82.67% 的Java用户
+         * 			内存消耗:39.2 MB,击败了94.50% 的Java用户
+         *
+         * 			执行耗时:5 ms,击败了93.08% 的Java用户
+         * 			内存消耗:39.3 MB,击败了90.44% 的Java用户
+         */
+    public List<Integer> findAnagrams(String s, String p) {
+        int[] dic = new int[26];
+        int[] window = new int[26];
+        List<Integer> res = new ArrayList<>();
+        int sL = s.length();
+        int pL = p.length();
 
-            int pLength = p.length();
-            int sLength = s.length();
-            int[] counts = new int[26];
-            for(int i = 0; i < pLength; i++){
-                counts[p.charAt(i) - 'a']++;
-            }
+        if (sL == 0 || sL < pL) return res;
 
-            ArrayList<Integer> res = new ArrayList<>();
-
-            for(int i = 0; i <= sLength - pLength; i++){
-                int[] tempCounts = Arrays.copyOf(counts, 26);
-                int j = i;
-                for(; j < sLength && j < pLength + i; j++){
-                    if(--tempCounts[s.charAt(j) - 'a'] < 0){
-                        break;
-                    }
-                }
-                if(j >= pLength + i){
-                    res.add(i);
-                }
-            }
-            return res;
-        }*/
-
-/*        public List<Integer> findAnagrams(String s, String p) {
-
-            // 先对目标串p每个字符进行字符计数，统计出每个字符的出现次数
-            int pLength = p.length();
-            int sLength = s.length();
-
-            int[] counts = new int[26];
-            for(int i = 0; i < pLength; i++){
-                counts[p.charAt(i) - 'a']++;
-            }
-
-            ArrayList<Integer> res = new ArrayList<>();  // 存储结果的结果集
-
-            int[] tempCounts = new int[26]; // 记录窗口内每种字符的出现次数
-            int left = 0, right = 0;
-            while(right < sLength){
-                int curR = s.charAt(right) - 'a';
-                tempCounts[curR]++;        // curR字符的出现次数加一
-                right++;    // 新增一个字符后，窗口右指针右移一位
-                while(tempCounts[curR] > counts[curR]){ // 不断缩小窗口大小，直到把超标字符移出去一个，使得不超标
-                    tempCounts[s.charAt(left) - 'a']--;
-                    left++;     // 移走一个字符后窗口左指针右移一位
-                }
-                if(right - left == pLength){
-                    res.add(left);
-                }
-            }
-            return res;
-        }*/
-
-        public List<Integer> findAnagrams(String s, String p) {//使用2个数组记录每个字符出现次数，通过遍历数组，判断是否一致
-            if(s.length()==0||s.length()<p.length())return new ArrayList<>();
-            int [] pMap = new int [26];
-            int [] windows = new int [26];
-            int winlen = p.length();
-            for(int i=0;i<winlen;i++){
-                pMap[p.charAt(i)-'a']++;
-                windows[s.charAt(i)-'a']++;
-            }
-            List<Integer> res = new ArrayList<>();
-            if(isSame(pMap,windows))    res.add(0);
-            for(int i=0;i<s.length()-winlen;i++){
-                windows[s.charAt(i+winlen)-'a']++;
-                windows[s.charAt(i)-'a']--;
-                if(isSame(pMap,windows))    res.add(i+1);
-            }
-            return res;
+        for (int i = 0; i < pL; i++) {
+            dic[p.charAt(i)-'a']++;
         }
-        private boolean isSame(int []a,int[] b){
-            for(int i=0;i<26;i++){
-                if(a[i]!=b[i])return false;
+
+        int left = 0;
+        int right = 0;
+        while (right < sL) {
+            int curR = s.charAt(right)-'a';
+            window[curR]++;
+            while (window[curR] > dic[curR]) {
+                window[s.charAt(left)-'a']--;
+                left++;
             }
-            return true;
+            if (right-left+1 == pL) {
+                res.add(left);
+            }
+            right++;
         }
+        return res;
+    }
 
 }
 //leetcode submit region end(Prohibit modification and deletion)
