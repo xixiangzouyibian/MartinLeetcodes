@@ -60,7 +60,7 @@ class Solution {
          * 		执行耗时:228 ms,击败了28.76% 的Java用户
          * 		内存消耗:38.7 MB,击败了69.05% 的Java用户
          */
-    public String longestPalindrome(String s) {
+/*    public String longestPalindrome(String s) {
         boolean[] dp = new boolean[s.length()];
         int left = 0;
         int right = 0;
@@ -82,6 +82,65 @@ class Solution {
             }
         }
         return s.substring(left, right+1);
+    }*/
+
+        /**
+         * 		执行耗时:33 ms,击败了80.81% 的Java用户
+         * 		内存消耗:39.2 MB,击败了53.66% 的Java用户
+         */
+/*    public String longestPalindrome(String s) {
+        int len = s.length();
+        if (len < 2) return s;
+
+        int maxLen = 1;
+        String res = s.substring(0, 1);
+        for (int i = 0; i < len - 1; i++) {
+            String oddStr = centerSpread(s, i, i);
+            String evenStr = centerSpread(s, i, i + 1);
+            String maxLenStr = oddStr.length() > evenStr.length() ? oddStr : evenStr;
+            if (maxLenStr.length() > maxLen) {
+                maxLen = maxLenStr.length();
+                res = maxLenStr;
+            }
+        }
+        return res;
+    }
+
+    private String centerSpread(String s, int left, int right) {
+        int len = s.length();
+        while (left >= 0 && right < len) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left--;
+                right++;
+            } else {
+                break;
+            }
+        }
+        return s.substring(left + 1, right);
+    }*/
+
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) return "";
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private int expandAroundCenter(String s, int left, int right) {
+        int L = left, R = right;
+        while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)) {
+            L--;
+            R++;
+        }
+        return R - L - 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
