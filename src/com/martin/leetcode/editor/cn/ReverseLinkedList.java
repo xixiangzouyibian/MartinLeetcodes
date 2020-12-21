@@ -21,13 +21,13 @@ public class ReverseLinkedList{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 /**
- * Definition for singly-linked list.**/
-public class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) { val = x; }
-}
-
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
 class Solution {
 /*    public ListNode reverseList(ListNode head) {
         ListNode pre = null;
@@ -48,6 +48,12 @@ class Solution {
         head.next.next = head;
         head.next = null;
         return cur;
+    }
+
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) { val = x; }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
