@@ -24,8 +24,8 @@
 
   
 package com.martin.leetcode.editor.cn;
-  
-  
+
+
 public class BestTimeToBuyAndSellStockIv{
 
     public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class BestTimeToBuyAndSellStockIv{
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maxProfit(int k, int[] prices) {
+/*    public int maxProfit(int k, int[] prices) {
         if (k < 1 ) { return 0; }
 
         // k 超过了上限，也就变成了 无限次交易问题
@@ -69,6 +69,39 @@ class Solution {
                 res += prices[i] - prices[i - 1];
             }
         }
+        return res;
+    }*/
+
+    public int maxProfit(int k, int[] prices) {
+        int n = prices.length;
+        if(n == 0) return 0;
+
+        k = Math.min(k, n / 2);
+
+        // 状态表示数组，三个维度分别代表：第几天，手上是否有股票0没有1有，还剩下多少次买卖机会
+        // 数组值表示当前还有多少钱
+        int[][][] f = new int[n][2][k + 1];
+
+        // 设置初始值，第一天手上有股票的状态，就是买入第一天价格的值
+        for(int i = 0; i <= k; i++) {
+            f[0][1][i] = -prices[0];
+        }
+        for(int i = 1; i < n; i++) {
+            for(int j = 0; j <= k; j++) {
+                if(j < k) {
+                    f[i][0][j] = Math.max(f[i - 1][0][j], f[i - 1][1][j + 1] + prices[i]);
+                } else {
+                    f[i][0][j] = f[i - 1][0][j];
+                }
+                f[i][1][j] = Math.max(f[i - 1][1][j], f[i - 1][0][j] - prices[i]);
+            }
+        }
+
+        int res = 0;
+        for(int i = 0; i <= k; i ++) {
+            res = Math.max(res, f[n - 1][0][i]);
+        }
+
         return res;
     }
 }
