@@ -96,13 +96,7 @@ class Solution {
                 f[i][1][j] = Math.max(f[i - 1][1][j], f[i - 1][0][j] - prices[i]);
             }
         }
-
-        int res = 0;
-        for(int i = 0; i <= k; i ++) {
-            res = Math.max(res, f[n - 1][0][i]);
-        }
-
-        return res;
+        return f[n-1][0][0];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
