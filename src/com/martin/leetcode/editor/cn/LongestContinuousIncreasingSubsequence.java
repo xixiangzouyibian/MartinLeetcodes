@@ -37,6 +37,9 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class LongestContinuousIncreasingSubsequence{
     public static void main(String[] args) {
        Solution solution = new LongestContinuousIncreasingSubsequence().new Solution();
@@ -44,7 +47,7 @@ public class LongestContinuousIncreasingSubsequence{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int findLengthOfLCIS(int[] nums) {
+/*    public int findLengthOfLCIS(int[] nums) {
         int len = nums.length;
         int l = 0, r = 0;
         int max = 0;
@@ -57,6 +60,23 @@ class Solution {
             l = r;
         }
         return max;
+    }*/
+
+    public int findLengthOfLCIS(int[] nums) {
+        int len = nums.length;
+        if (len <= 1) return len;
+
+        Deque<Integer> stack = new ArrayDeque<>(len);
+        stack.offer(0);
+        int max = 0;
+        for (int i = 1; i < len; i++) {
+            if (nums[i] <= nums[stack.peekLast()]) {
+                max = Math.max(max, stack.size());
+                stack.clear();
+            }
+            stack.offer(i);
+        }
+        return Math.max(max, stack.size());
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
