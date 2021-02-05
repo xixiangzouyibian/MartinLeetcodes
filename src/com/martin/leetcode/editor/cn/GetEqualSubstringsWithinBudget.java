@@ -50,11 +50,12 @@ package com.martin.leetcode.editor.cn;
 public class GetEqualSubstringsWithinBudget{
     public static void main(String[] args) {
        Solution solution = new GetEqualSubstringsWithinBudget().new Solution();
+        System.out.println(solution.equalSubstring("abcd","cdef",3));
     }
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int equalSubstring(String s, String t, int maxCost) {
+/*    public int equalSubstring(String s, String t, int maxCost) {
         int len = s.length();
         int l = 0, r = 0;
         int max = 0;
@@ -71,6 +72,34 @@ class Solution {
             r++;
         }
         return max;
+    }*/
+
+    public int equalSubstring(String s, String t, int maxCost) {
+        int len = s.length();
+        int[] diff = new int[len+1];
+        for (int i = 0; i < len; i++) {
+            diff[i+1] = diff[i]+Math.abs(s.charAt(i)-t.charAt(i));
+        }
+        int max = 0;
+        for (int j = 1; j <= len; j++) {
+            int k = check(diff, j, diff[j] - maxCost);
+            max = Math.max(max, j - k);
+        }
+        return max;
+    }
+
+    public int check(int[] diff, int end, int target) { // target = diff[end] - maxCost and find start
+        int l = 0;
+        int h = end;
+        while (l < h) {
+            int mid = (l + h) >> 1;
+            if (diff[mid] < target) {
+                l = mid+1;
+            } else {
+                h = mid;
+            }
+        }
+        return l;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
