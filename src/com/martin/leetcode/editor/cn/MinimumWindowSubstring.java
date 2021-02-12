@@ -35,9 +35,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MinimumWindowSubstring{
     public static void main(String[] args) {
        Solution solution = new MinimumWindowSubstring().new Solution();
@@ -48,41 +45,46 @@ public class MinimumWindowSubstring{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String minWindow(String s, String t) {
-        int len = s.length();
-
-        int[] dir = new int[58];
-        for (Character c : t.toCharArray()) {
-            dir[c-'A']++;
+        int[] map = new int[58];
+        int countExpected = 0;
+        for (char c : t.toCharArray()) {
+            if (map[c-'A'] == 0) {
+                countExpected++;
+            }
+            map[c-'A']++;
         }
-
         int l = 0, r = 0;
-        int min = len+1;
-        int minStart = 0;
-        Map<Integer, Integer> window = new HashMap<>();
-        char[] sChars = s.toCharArray();
-        while (r < len) {
-            int inputKey = sChars[r] - 'A';
-            window.put(inputKey, window.getOrDefault(inputKey, 0)+1);
-            while (check(window, dir)) {
-                int cur = r-l+1;
-                if (cur < min) {
-                    min = cur;
-                    minStart = l;
+        int count = 0;
+        int[] dir = new int[58];
+        int start = 0;
+        int minimum = Integer.MAX_VALUE;
+        char[] chars = s.toCharArray();
+        while (r < s.length()) {
+            int in = chars[r]-'A';
+            if (map[in] > 0) {
+                dir[in]++;
+                if (dir[in] == map[in]) {
+                    count++;
                 }
-                int dropKey = sChars[l]-'A';
-                window.put(dropKey, window.get(dropKey)-1);
+            }
+            while (count == countExpected) {
+                int len = r-l+1;
+                if (minimum > len) {
+                    minimum = len;
+                    start = l;
+                }
+                int out = chars[l]-'A';
+                if (map[out] > 0) {
+                    dir[out]--;
+                    if (dir[out] < map[out]) {
+                        count--;
+                    }
+                }
                 l++;
             }
             r++;
         }
-        return min == len+1 ? "" : s.substring(minStart, minStart+min);
-    }
-
-    public boolean check(Map<Integer, Integer> window, int[] dir) {
-        for (int i = 0; i < 58; i++) {
-            if (dir[i] > 0 && (!window.containsKey(i) || dir[i] > window.get(i))) return false;
-        }
-        return true;
+        return minimum == Integer.MAX_VALUE ? "" : s.substring(start, start+minimum);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
