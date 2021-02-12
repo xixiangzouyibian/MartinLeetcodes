@@ -32,7 +32,7 @@ public class LongestSubstringWithAtMostTwoDistinctCharacters{
 class Solution {
     public int lengthOfLongestSubstringTwoDistinct(String s) {
         int len = s.length();
-        if (len == 0) return 0;
+        if (len < 3) return len;
 
         int l = 0, r = 0;
         int longest = 0;
