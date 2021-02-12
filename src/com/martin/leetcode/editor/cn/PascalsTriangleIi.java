@@ -20,7 +20,7 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class PascalsTriangleIi{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public List<Integer> getRow(int rowIndex) {
+/*    public List<Integer> getRow(int rowIndex) {
         if (rowIndex == 0) return Collections.singletonList(1);
 
         Integer[] nums = new Integer[rowIndex+1];
@@ -43,6 +43,17 @@ class Solution {
             }
         }
         return Arrays.asList(nums);
+    }*/
+
+    public List<Integer> getRow(int rowIndex) {
+        if (rowIndex == 0) return Collections.singletonList(1);
+
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        for (int i = 1; i <= rowIndex; i++) {
+            list.add((int)((long)list.get(i-1) * (rowIndex-i+1) / i));
+        }
+        return list;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
