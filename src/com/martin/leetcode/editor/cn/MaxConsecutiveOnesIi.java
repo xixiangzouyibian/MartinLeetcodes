@@ -57,7 +57,7 @@ class Solution {
         return max;
     }*/
 
-    public int findMaxConsecutiveOnes(int[] nums) {
+/*    public int findMaxConsecutiveOnes(int[] nums) {
         int len = nums.length;
         int l = 0, r = 0;
         int max = 0;
@@ -74,6 +74,23 @@ class Solution {
             }
             max = Math.max(max, r-l+1);
             r++;
+        }
+        return max;
+    }*/
+
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int dp0 = 0, dp1 = 0;
+        int max = 0;
+        for (int num : nums) {
+            if (num == 1) {
+                dp0 += 1;
+                dp1 += 1;
+            } else {
+                dp1 = dp0 + 1;
+                dp0 = 0;
+            }
+            max = Math.max(dp0, max);
+            max = Math.max(dp1, max);
         }
         return max;
     }
