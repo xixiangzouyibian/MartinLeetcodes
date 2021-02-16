@@ -29,6 +29,9 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class SurroundedRegions{
     public static void main(String[] args) {
        Solution solution = new SurroundedRegions().new Solution();
@@ -98,7 +101,7 @@ class Solution {
 
     int[][] directions = new int[][] {{1,0},{0,-1},{-1,0},{0,1}};
 
-    public void solve(char[][] board) {
+/*    public void solve(char[][] board) {
         int row = board.length;
         if (row <= 1) return;
         int col = board[0].length;
@@ -131,6 +134,46 @@ class Solution {
             int x = i + d[0];
             int y = j + d[1];
             dfs(x, y, row, col, board);
+        }
+    }*/
+
+    public void solve(char[][] board) {
+        int row = board.length;
+        if (row <= 1) return;
+        int col = board[0].length;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                boolean isEdge = i == 0 || i == row-1 || j == 0 || j == col-1;
+                if (isEdge && board[i][j] == 'O') {
+                    bfs(i, j, row, col, board);
+                }
+            }
+        }
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    private void bfs(int i, int j, int row, int col, char[][] board) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {i, j});
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int x = cur[0];
+            int y = cur[1];
+            if (x >= 0 && x < row && y >= 0 && y < col && board[x][y] != '#' && board[x][y] == 'O') {
+                board[x][y] = '#';
+                for (int[] d : directions) {
+                    queue.offer(new int[]{x + d[0], y + d[1]});
+                }
+            }
         }
     }
 }
