@@ -41,8 +41,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
-
 public class ArrayPartitionI{
     public static void main(String[] args) {
        Solution solution = new ArrayPartitionI().new Solution();
@@ -50,13 +48,35 @@ public class ArrayPartitionI{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int arrayPairSum(int[] nums) {
+/*    public int arrayPairSum(int[] nums) {
         Arrays.sort(nums);
         int res = 0;
         for (int i = 0; i < nums.length; i+=2) {
             res += nums[i];
         }
         return res;
+    }*/
+
+    public int arrayPairSum(int[] nums) {
+        int[] counts = new int[20001];
+        for (int num : nums) {
+            counts[num+10000]++;
+        }
+        int sum = 0;
+        boolean pick = true;
+        for (int i = 0; i < 20001; i++) {
+            if (counts[i] == 0) continue;
+
+            int val = i - 10000;
+            while (counts[i] > 0) {
+                if (pick) {
+                    sum += val;
+                }
+                pick = !pick;
+                counts[i]--;
+            }
+        }
+        return sum;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
