@@ -47,9 +47,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 public class NumberOfIslands{
 
     public static void main(String[] args) {
@@ -59,48 +56,87 @@ public class NumberOfIslands{
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+/*    public int numIslands(char[][] grid) {
+        int row = grid.length;
+        if (row < 1) return 0;
+        int col = grid[0].length;
+
+        UnionFind unionFind = new UnionFind(row * col);
+        int[][] directions = new int[][] {{1,0},{0,1}};
+        int space = 0;
+        for(int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == '0') {
+                    space++;
+                } else {
+                    for (int[] d : directions) {
+                        int x = i + d[0];
+                        int y = j + d[1];
+                        if (x >= 0 && x < row && y >= 0 && y < col && grid[x][y] == '1') {
+                            unionFind.union(i*col+j, x*col+y);
+                        }
+                    }
+                }
+            }
+        }
+        return unionFind.count-space;
+    }
+
+    class UnionFind {
+        int[] p;
+        int count;
+        public UnionFind(int len) {
+            p = new int[len];
+            count = len;
+            for (int i = 0; i < len; i++) {
+                p[i] = i;
+            }
+        }
+        public int find(int id) {
+            if (p[id] != id) {
+                p[id] = find(p[id]);
+            }
+            return p[id];
+        }
+        public void union(int x, int y) {
+            int xRoot = find(x);
+            int yRoot = find(y);
+            if (xRoot != yRoot) {
+                p[xRoot] = yRoot;
+                count--;
+            }
+        }
+    }*/
+
+    int[][] directions = new int[][] {{1,0},{0,-1},{-1,0},{0,1}};
+
     public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0) return 0;
-        int m = grid.length, n = grid[0].length;
+        int row = grid.length;
+        if (row < 1) return 0;
+        int col = grid[0].length;
+
+        boolean[][] isVisited = new boolean[row][col];
         int count = 0;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == '1') {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == '1' && !isVisited[i][j]) {
+                    dfs(i, j, row, col, grid, isVisited);
                     count++;
-                    findBfs(grid, i, j, m, n);
                 }
             }
         }
         return count;
     }
 
-    private void findDfs(char[][] grid, int i, int j, int m, int n) {
-        if (i >= m || j >= n || i < 0 || j < 0 || grid[i][j] == '0') return;
-
-        grid[i][j] = '0';
-        findDfs(grid, i+1, j, m, n);
-        findDfs(grid, i, j+1, m, n);
-        findDfs(grid, i-1, j, m, n);
-        findDfs(grid, i, j-1, m, n);
-    }
-
-    private void findBfs(char[][] grid, int i, int j, int m, int n) {
-        Queue<int[]> queue = new ArrayDeque<>();
-        if (grid[i][j] == '1') {
-            queue.offer(new int[] {i, j});
+    private void dfs(int i, int j, int row, int col, char[][] grid, boolean[][] isVisited) {
+        if (i < 0 || i >= row || j < 0 || j >= col || grid[i][j] == '0' || isVisited[i][j]) {
+            return;
         }
-        while (!queue.isEmpty()) {
-            int[] position = queue.poll();
-            int r = position[0], c = position[1];
-
-            if (r >= m || c >= n || r < 0 || c < 0 || grid[r][c] == '0') continue;
-
-            grid[r][c] = '0';
-            queue.offer(new int[] {r+1, c});
-            queue.offer(new int[] {r, c+1});
-            queue.offer(new int[] {r-1, c});
-            queue.offer(new int[] {r, c-1});
-
+        isVisited[i][j] = true;
+        for (int[] d : directions) {
+            int x = i + d[0];
+            int y = j + d[1];
+            dfs(x, y, row, col, grid, isVisited);
         }
     }
 }
