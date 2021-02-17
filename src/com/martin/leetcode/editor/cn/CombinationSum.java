@@ -47,7 +47,6 @@ package com.martin.leetcode.editor.cn;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CombinationSum{
@@ -58,14 +57,14 @@ public class CombinationSum{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+/*    public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
         dfs(candidates, 0, target, new ArrayList<>(), res);
         return new ArrayList<>(res);
     }
 
-/*    private void dfs(int[] candidates, int begin, int target, List<Integer> combination, List<List<Integer>> res) {
+*//*    private void dfs(int[] candidates, int begin, int target, List<Integer> combination, List<List<Integer>> res) {
         if (target < 0) {
             return;
         }
@@ -79,7 +78,7 @@ class Solution {
             dfs(candidates, i, target-candidates[i], combination, res);
             combination.remove(combination.size()-1);
         }
-    }*/
+    }*//*
 
     private void dfs(int[] candidates, int begin, int target, List<Integer> combination, List<List<Integer>> res) {
         if (target == 0) {
@@ -93,6 +92,30 @@ class Solution {
             }
             combination.add(candidates[i]);
             dfs(candidates, i, target-candidates[i], combination, res);
+            combination.remove(combination.size()-1);
+        }
+    }*/
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(candidates, 0, target, new ArrayList<>(), res);
+        return new ArrayList<>(res);
+    }
+
+    private void dfs(int[] candidates, int begin, int target, List<Integer> combination, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(new ArrayList<>(combination));
+            return;
+        }
+
+        if (begin == candidates.length) return;
+
+        for (int i = 0; candidates[begin] * i <= target; i++) {
+            dfs(candidates, begin+1, target - candidates[begin] * i, combination, res);
+            combination.add(candidates[begin]);
+        }
+
+        for (int i = 0; candidates[begin] * i <= target; i++) {
             combination.remove(combination.size()-1);
         }
     }
