@@ -43,16 +43,16 @@ public class MaxConsecutiveOnesIii{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int longestOnes(int[] A, int K) {
+/*    public int longestOnes(int[] A, int K) {
         int len = A.length;
-        int l = 0, r = 0;
         int longest = 0;
+        int l = 0, r = 0;
         int count1 = 0;
         while (r < len) {
             if (A[r] == 1) {
                 count1++;
             }
-            while (A[r] == 0 && count1+K < r-l+1) {
+            while (count1+K < r-l+1) {
                 if (A[l] == 1) {
                     count1--;
                 }
@@ -62,6 +62,31 @@ class Solution {
             r++;
         }
         return longest;
+    }*/
+
+    public int longestOnes(int[] A, int K) {
+        int len = A.length;
+        int l = 0, r = len;
+        int[] sum = new int[len+1];
+        for (int i = 0; i < len; i++) {
+            sum[i+1] = sum[i] + A[i];
+        }
+        while (l < r) {
+            int mid = (l + r + 1) >> 1;
+            if (check(mid, sum, K)) {
+                l = mid;
+            } else {
+                r = mid-1;
+            }
+        }
+        return l;
+    }
+
+    private boolean check(int len, int[] sum, int K) {
+        for (int i = len; i < sum.length; i++) {
+            if (sum[i] - sum[i-len] + K >= len) return true;
+        }
+        return false;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
