@@ -70,15 +70,21 @@ class Solution {
         List<String> res = new ArrayList<>();
         if (len < 4 || len > 12) return new ArrayList<>();
 
-        dfs(s, 0, 0, s.length(), new ArrayDeque<>(), res);
+        dfs(s.toCharArray(), 0, 0, s.length(), new ArrayDeque<>(), res);
 
         return res;
     }
 
-    private void dfs(String s, int level, int start, int len, Deque<String> queue, List<String> res) {
-        if (start == len) {
-            if (level == 4)
+    private void dfs(char[] s, int level, int start, int len, Deque<String> queue, List<String> res) {
+        if (level == 4) {
+            if (start == len)
                 res.add(String.join(".", queue));
+            return;
+        }
+        if (start < len && s[start] == '0') {
+            queue.addLast("0");
+            dfs(s, level+1, start+1, len, queue, res);
+            queue.removeLast();
             return;
         }
 
@@ -86,27 +92,16 @@ class Solution {
             if (i >= len) break;
             if ((4-level) * 3 < len - i) continue;
 
-           if (check(s, start, i)) {
-               queue.addLast(s.substring(start, i+1));
+            StringBuilder sb = new StringBuilder();
+            for (int j = start; j <= i; j++) {
+                sb.append(s[j]);
+            }
+           if (Integer.parseInt(sb.toString()) <= 255) {
+               queue.addLast(sb.toString());
                dfs(s, level+1, i+1, len, queue, res);
                queue.removeLast();
            }
         }
-    }
-
-    private boolean check(String s, int left, int right) {
-        int len = right - left + 1;
-        if (len > 1 && s.charAt(left) == '0') {
-            return false;
-        }
-
-        int res = 0;
-        while (left <= right) {
-            res = res * 10 + s.charAt(left) - '0';
-            left++;
-        }
-
-        return res >= 0 && res <= 255;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
