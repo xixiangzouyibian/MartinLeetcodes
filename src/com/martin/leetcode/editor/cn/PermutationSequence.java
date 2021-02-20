@@ -51,9 +51,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PermutationSequence{
     public static void main(String[] args) {
        Solution solution = new PermutationSequence().new Solution();
@@ -62,7 +59,7 @@ public class PermutationSequence{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public String getPermutation(int n, int k) {
+/*    public String getPermutation(int n, int k) {
         List<List<Integer>> res = new ArrayList<>();
         dfs(n, k, 0, new boolean[n+1], new ArrayList<>(), res);
         StringBuilder stringBuilder = new StringBuilder();
@@ -86,6 +83,30 @@ class Solution {
             item.remove(item.size()-1);
             visited[i] = false;
         }
+    }*/
+
+    public String getPermutation(int n, int k) {
+        StringBuilder res = new StringBuilder();
+        boolean[] visited = new boolean[n+1];
+        for (int bit = 0; bit < n; bit++) {
+            int fact = 1;
+            for (int i = 1; i <= n-bit-1; i++) {
+                fact *= i;
+            }
+            for (int j = 1; j <= n; j++) {
+                if (!visited[j]) {
+                    if (fact < k) {
+                        k -= fact;
+                    } else {
+                        res.append(j);
+                        visited[j] = true;
+                        break;
+                    }
+                }
+
+            }
+        }
+        return res.toString();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
