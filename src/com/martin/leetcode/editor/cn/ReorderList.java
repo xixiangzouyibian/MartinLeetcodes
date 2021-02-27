@@ -17,6 +17,9 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 public class ReorderList{
     public static void main(String[] args) {
        Solution solution = new ReorderList().new Solution();
@@ -41,7 +44,7 @@ public class ListNode {
     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 }
 class Solution {
-    public void reorderList(ListNode head) {
+/*    public void reorderList(ListNode head) {
         ListNode slow = new ListNode();
         slow.next = head;
         ListNode quick = new ListNode();
@@ -71,6 +74,24 @@ class Solution {
         head.next = null;
 
         return last;
+    }*/
+
+    public void reorderList(ListNode head) {
+        Deque<ListNode> queue = new LinkedList<>();
+        while (head != null) {
+            queue.offer(head);
+            head = head.next;
+        }
+        ListNode pre = null;
+        while (!queue.isEmpty()) {
+            ListNode cur = queue.pollFirst();
+            if (pre != null) {
+                pre.next = cur;
+            }
+            cur.next = queue.pollLast();
+            pre = cur.next;
+        }
+        if (pre != null) pre.next = null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
