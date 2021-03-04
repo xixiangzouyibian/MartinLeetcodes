@@ -19,18 +19,21 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collections;
+import java.util.List;
 
 public class RussianDollEnvelopes{
     public static void main(String[] args) {
        Solution solution = new RussianDollEnvelopes().new Solution();
-        System.out.println(solution.maxEnvelopes(new int[][] {{6,5},{5,4},{2,3}}));
+//        System.out.println(solution.maxEnvelopes(new int[][] {{5,4},{6,4},{6,7},{2,3}}));
+        System.out.println(solution.maxEnvelopes(new int[][] {{1,3},{3,5},{6,7},{6,8},{8,4},{9,8}}));
     }
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maxEnvelopes(int[][] envelopes) {
+/*    public int maxEnvelopes(int[][] envelopes) {
         int len = envelopes.length;
         if (len == 0) return 0;
         // sort envelopes
@@ -44,6 +47,7 @@ class Solution {
             }
         });
 
+        new LinkedList<>()
         int[] dp = new int[len];
         int res = 1;
         for (int i = 0; i < len; i++) {
@@ -56,6 +60,32 @@ class Solution {
             res = Math.max(res, dp[i]);
         }
         return res;
+    }*/
+
+    public int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null || envelopes.length == 0)
+            return 0;
+        Arrays.sort(envelopes, (int[] arr1, int[] arr2) -> {
+            if (arr1[0] == arr2[0])
+                return arr2[1] - arr1[1];
+            else
+                return arr1[0] - arr2[0];
+        });
+        return lengthOfLIS(envelopes);
+    }
+
+    public int lengthOfLIS(int[][] nums) {
+        List<Integer> list = new ArrayList<>(nums.length);
+        for (int[] num : nums) {
+            if (list.size() == 0 || list.get(list.size() - 1) < num[1])
+                list.add(num[1]);
+            else {
+                int i = Collections.binarySearch(list, num[1]);
+
+                list.set((i < 0) ? -i-1 : i, num[1]);
+            }
+        }
+        return list.size();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
