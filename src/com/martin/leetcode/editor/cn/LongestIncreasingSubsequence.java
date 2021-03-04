@@ -21,6 +21,10 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 public class LongestIncreasingSubsequence{
 
     public static void main(String[] args) {
@@ -32,46 +36,36 @@ public class LongestIncreasingSubsequence{
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
 /*    public int lengthOfLIS(int[] nums) {
-        if (nums == null || nums.length == 0) return 0;
-        int[] dp = new int[nums.length];
-        int max = 1;
-        Arrays.fill(dp, 1);
-        for (int i = 1; i < nums.length; i++) {
+        int len = nums.length;
+        if (len == 0) return 0;
+
+        int[] dp = new int[len];
+        int res = 1;
+        for (int i = 0; i < len; i++) {
+            dp[i] = 1;
             for (int j = 0; j < i; j++) {
-                if (nums[i] > nums[j]) {
-                    dp[i] = Math.max(dp[i], dp[j]+1);
-                }
+                if (nums[i] > nums[j]) dp[i] = Math.max(dp[i], dp[j]+1);
             }
-            if (max < dp[i]) max = dp[i];
+            res = Math.max(res, dp[i]);
         }
-        return max;
+        return res;
     }*/
 
     public int lengthOfLIS(int[] nums) {
-        int[] top = new int[nums.length];
-        int lengthOfLIS = 0;
-        for (int num : nums) {
-            int index = binSearch(top, num, 0, lengthOfLIS);
-            if (index == lengthOfLIS) lengthOfLIS++;
-            top[index] = num;
-        }
-        return lengthOfLIS;
-    }
+        int len = nums.length;
+        if (len == 0) return 0;
 
-    public int binSearch(int[] top, int num, int left, int right) {
-        while (left < right) {
-            int middle = (left + right) >> 1;
-            if (num > top[middle]) {
-                left = middle + 1;
-            } else if (num < top[middle]) {
-                right = middle;
+        List<Integer> list = new LinkedList<>();
+        for (int num : nums) {
+            if (list.isEmpty() || list.get(list.size() - 1) < num) {
+                list.add(num);
             } else {
-                right = middle;
+                int index = Collections.binarySearch(list, num);
+                list.set(index < 0 ? -index - 1 : index, num);
             }
         }
-        return left;
+        return list.size();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
