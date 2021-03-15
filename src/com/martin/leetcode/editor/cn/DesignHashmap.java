@@ -37,26 +37,23 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class DesignHashmap{
 //    public static void main(String[] args) {
 //       Solution solution = new DesignHashmap().new Solution();
 //    }
     
     //leetcode submit region begin(Prohibit modification and deletion)
-class MyHashMap {
+/*class MyHashMap {
 
     private int DEFAULT_CAP = 2069;
     private Bucket[] buckets;
 
-    /** Initialize your data structure here. */
+    *//** Initialize your data structure here. *//*
     public MyHashMap() {
         buckets = new Bucket[DEFAULT_CAP];
     }
     
-    /** value will always be non-negative. */
+    *//** value will always be non-negative. *//*
     public void put(int key, int value) {
         int index = key % DEFAULT_CAP;
         if (buckets[index] == null) {
@@ -65,7 +62,7 @@ class MyHashMap {
         buckets[index].put(key, value);
     }
     
-    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    *//** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key *//*
     public int get(int key) {
         int index = key % DEFAULT_CAP;
         if (buckets[index] == null) return -1;
@@ -73,7 +70,7 @@ class MyHashMap {
         return buckets[index].get(key);
     }
     
-    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    *//** Removes the mapping of the specified value key if this map contains a mapping for the key *//*
     public void remove(int key) {
         int index = key % DEFAULT_CAP;
         if (buckets[index] == null) return;
@@ -127,6 +124,65 @@ class Bucket {
         Node(K k, V v) {
             this.k = k;
             this.v = v;
+        }
+    }
+}*/
+
+class MyHashMap {
+
+    Node[] nodes;
+    int size = 13333;
+
+    /** Initialize your data structure here. */
+    public MyHashMap() {
+        nodes = new Node[size];
+    }
+
+    /** value will always be non-negative. */
+    public void put(int key, int value) {
+        int index = key % size;
+        while (nodes[index] != null) {
+            if (nodes[index].key == key) {
+                nodes[index].value = value;
+                nodes[index].isDeleted = false;
+                return;
+            }
+            index = (index + 1) % size;
+        }
+        nodes[index] = new Node(key, value, false);
+    }
+
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    public int get(int key) {
+        int index = key % size;
+        while (nodes[index] != null) {
+            if (nodes[index].key == key && !nodes[index].isDeleted) {
+                return nodes[index].value;
+            }
+            index = (index + 1) % size;
+        }
+        return -1;
+    }
+
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    public void remove(int key) {
+        int index = key % size;
+        while (nodes[index] != null) {
+            if (nodes[index].key == key) {
+                nodes[index].isDeleted = true;
+            }
+            index = (index + 1) % size;
+        }
+    }
+
+    class Node {
+        int key;
+        int value;
+        boolean isDeleted;
+        Node(int key, int value, boolean isDeleted) {
+            this.key = key;
+            this.value = value;
+            this.isDeleted = isDeleted;
         }
     }
 }
