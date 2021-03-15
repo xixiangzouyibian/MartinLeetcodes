@@ -1,7 +1,5 @@
 package com.martin.leetcode.editor.cn;
 
-import java.util.Stack;
-
 /**
  * Created by Martin Zhou on 2021/3/15
  */
@@ -10,7 +8,7 @@ public class MaximumScore {
         System.out.println(new MaximumScore().maximumScore(new int[] {1,4,3,7,4,5}, 3));
     }
 
-    public int maximumScore(int[] nums, int k) {
+/*    public int maximumScore(int[] nums, int k) {
         int len = nums.length;
 
         int[] n = new int[len+2];
@@ -46,5 +44,28 @@ public class MaximumScore {
             }
         }
         return res;
+    }*/
+
+    public int maximumScore(int[] nums, int k) {
+        int l = k, r = k, t = nums[k];
+        int len = nums.length;
+        int res = 0;
+        while (true) {
+            while (l >= 0 && nums[l] >= t) l--;
+            while (r < len && nums[r] >= t) r++;
+            res = Math.max(res, (r - l - 1) * t);
+
+            if (l == -1 && r == len) break;
+            if (l == -1) {
+                t = nums[r];
+            } else if (r == len) {
+                t = nums[l];
+            } else {
+                t = Math.max(nums[l], nums[r]);
+            }
+        }
+
+        return res;
     }
+
 }
