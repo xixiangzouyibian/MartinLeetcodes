@@ -35,6 +35,7 @@ package com.martin.leetcode.editor.cn;
 
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class WordBreak{
@@ -46,7 +47,7 @@ public class WordBreak{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public boolean wordBreak(String s, List<String> wordDict) {
+/*    public boolean wordBreak(String s, List<String> wordDict) {
         s += " ";
         int len = s.length();
         boolean[] dp = new boolean[len];
@@ -60,8 +61,108 @@ class Solution {
             }
         }
         return dp[len-1];
+    }*/
+
+/*    public boolean wordBreak(String s, List<String> wordDict) {
+        Trie trie = new Trie();
+        for (String w : wordDict) {
+            trie.insert(w);
+        }
+
+        int len = s.length();
+        Queue<Integer> queue = new ArrayDeque<>();
+        boolean[] visit = new boolean[len];
+        queue.offer(0);
+        visit[0] = true;
+
+        while (!queue.isEmpty()) {
+            int index = queue.poll();
+            List<Integer> next = trie.search(s, index);
+            for (int n : next) {
+                if (n == len-1) return true;
+                if (!visit[n+1]) {
+                    queue.offer(n+1);
+                    visit[n+1] = true;
+                }
+            }
+        }
+        return false;
     }
 
+    class Trie {
+        TrieNode root;
+
+        class TrieNode {
+            TrieNode[] next = new TrieNode[26];
+            boolean isWord = false;
+        }
+
+        Trie() {
+            root = new TrieNode();
+        }
+
+        public void insert(String word) {
+            char[] chars = word.toCharArray();
+            TrieNode cur = root;
+            for (char c : chars) {
+                if (cur.next[c-'a'] == null) {
+                    cur.next[c-'a'] = new TrieNode();
+                }
+                cur = cur.next[c-'a'];
+            }
+            cur.isWord = true;
+        }
+
+        public boolean search(String word) {
+            char[] chars = word.toCharArray();
+            TrieNode cur = root;
+            for (char c : chars) {
+                if (cur.next[c-'a'] == null) return false;
+                cur = cur.next[c-'a'];
+            }
+            return cur != null && cur.isWord;
+        }
+
+        public List<Integer> search(String s, int prefixIndex) {
+            TrieNode cur = root;
+            int start = prefixIndex;
+            List<Integer> res = new ArrayList<>();
+            int len = s.length();
+            while (start < len) {
+                char c = s.charAt(start);
+                if (cur.next[c-'a'] == null) return res;
+                cur = cur.next[c-'a'];
+                if (cur.isWord) res.add(start);
+                start++;
+            }
+            return res;
+        }
+    }*/
+
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashSet<Long> word2Hash = new HashSet<>();
+        for (String w : wordDict) {
+            long h = 0;
+            for (char c : w.toCharArray()) {
+                h = h * 131 + c;
+            }
+            word2Hash.add(h);
+        }
+        int len = s.length();
+        boolean[] dp = new boolean[len+1];
+        dp[0] = true;
+        s = " " + s;
+        for (int i = 0; i < len; i++) {
+            if (dp[i]) {
+                long h = 0;
+                for (int j = i+1; j <= len; j++) {
+                    h = h * 131 + s.charAt(j);
+                    if (word2Hash.contains(h)) dp[j] = true;
+                }
+            }
+        }
+        return dp[len];
+    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
