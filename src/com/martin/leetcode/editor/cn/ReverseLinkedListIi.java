@@ -18,7 +18,14 @@ public class ReverseLinkedListIi{
     public static void main(String[] args) {
        Solution solution = new ReverseLinkedListIi().new Solution();
     }
-    
+
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
     //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for singly-linked list.
@@ -30,72 +37,48 @@ public class ReverseLinkedListIi{
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-public class ListNode {
-    int val;
-    ListNode next;
-    ListNode() {}
-    ListNode(int val) { this.val = val; }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-}
+
 class Solution {
-/*    public ListNode reverseBetween(ListNode head, int left, int right) {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head == null || head.next == null) return head;
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
-        int count = 1;
-        ListNode pre = dummy, cur = head;
-        ListNode leftNode = dummy;
-        while (count <= right) {
-            if (count > left) {
-                ListNode next = cur.next;
-                cur.next = pre;
-                pre = cur;
-                cur = next;
-            } else {
-                if (count == left) {
-                    leftNode = pre;
-                }
-                pre = cur;
-                cur = cur.next;
-            }
-            count++;
+        ListNode cursor = dummy;
+        for (int i = 1; i < left; i++) cursor = cursor.next;
+
+        ListNode a = cursor.next, b = a.next;
+        for (int i = 0; i < right-left; i++) {
+            ListNode temp = b.next;
+            b.next = a;
+            a = b;
+            b = temp;
         }
-        ListNode next = leftNode.next;
-        leftNode.next = pre;
-        next.next = cur;
+        cursor.next.next = b;
+        cursor.next = a;
 
         return dummy.next;
-    }*/
+    }
 
-    public ListNode reverseBetween(ListNode head, int left, int right) {
+/*    public ListNode reverseBetween(ListNode head, int left, int right) {
         if (left == 1) {
-            return reverseTopN(head, right);
+            return reverseTopK(head, right);
         }
-        ListNode last = reverseBetween(head.next, left-1, right-1);
-        head.next = last;
+        head.next = reverseBetween(head.next, left-1, right-1);
         return head;
     }
 
     ListNode next;
-    private ListNode reverseTopN(ListNode head, int N) {
-        if (N == 1) {
-            next = head.next;
-            return head;
+    private ListNode reverseTopK(ListNode node, int k) {
+        if (k == 1) {
+            next = node.next;
+            return node;
         }
-        ListNode last = reverseTopN(head.next, N-1);
-        head.next.next = head;
-        head.next = next;
-        return last;
-    }
-
-    /*    private ListNode reverseAll(ListNode head) {
-        if (head.next == null) {
-            return head;
-        }
-        ListNode last = reverseAll(head.next);
-        head.next.next = head;
-        head.next = null;
-        return last;
+        ListNode nHead = reverseTopK(node.next, k-1);
+        node.next.next = node;
+        node.next = next;
+        return nHead;
     }*/
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
