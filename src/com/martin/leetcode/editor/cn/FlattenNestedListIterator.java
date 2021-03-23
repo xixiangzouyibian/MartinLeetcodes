@@ -23,9 +23,7 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class FlattenNestedListIterator{
     public static void main(String[] args) {
@@ -64,7 +62,7 @@ public interface NestedInteger {
  *     public List<NestedInteger> getList();
  * }
  */
-public class NestedIterator implements Iterator<Integer> {
+/*public class NestedIterator implements Iterator<Integer> {
     List<Integer> res;
     int count = 0;
     int cap = 0;
@@ -93,6 +91,41 @@ public class NestedIterator implements Iterator<Integer> {
     @Override
     public boolean hasNext() {
         return count < cap;
+    }
+}*/
+
+public class NestedIterator implements Iterator<Integer> {
+
+    Deque<NestedInteger> stack;
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+        stack = new ArrayDeque<>();
+        for (int i = nestedList.size()-1; i >= 0; i--) {
+            stack.offerLast(nestedList.get(i));
+        }
+    }
+
+    @Override
+    public Integer next() {
+        return Objects.requireNonNull(stack.pollLast()).getInteger();
+    }
+
+    @Override
+    public boolean hasNext() {
+        if (stack.isEmpty()) {
+            return false;
+        } else {
+            if (stack.peekLast().isInteger()) {
+                return true;
+            } else {
+                NestedInteger ni = stack.pollLast();
+                List<NestedInteger> list = ni.getList();
+                for (int i = list.size()-1; i >=0; i--) {
+                    stack.offerLast(list.get(i));
+                }
+                return hasNext();
+            }
+        }
     }
 }
 
