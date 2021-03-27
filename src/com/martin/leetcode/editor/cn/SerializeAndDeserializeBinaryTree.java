@@ -53,7 +53,9 @@ package com.martin.leetcode.editor.cn;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class SerializeAndDeserializeBinaryTree{
     public static void main(String[] args) {
@@ -77,7 +79,7 @@ public class SerializeAndDeserializeBinaryTree{
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Codec {
+/*public class Codec {
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
@@ -109,6 +111,56 @@ public class Codec {
         root.left = build(nodes);
         ++index;
         root.right = build(nodes);
+        return root;
+    }
+}*/
+
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) return "";
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        List<String> res = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                TreeNode node = queue.poll();
+                if (node != null) {
+                    res.add(String.valueOf(node.val));
+                    queue.add(node.left);
+                    queue.offer(node.right);
+                } else {
+                    res.add("X");
+                }
+            }
+        }
+        return String.join(",",res);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.equals("")) return null;
+
+        String[] nodes = data.split(",");
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        queue.offer(root);
+        int cur = 0;
+        while (!queue.isEmpty()) {
+            TreeNode curNode = queue.poll();
+            String lV = nodes[++cur];
+            if (!"X".equals(lV)) {
+                curNode.left = new TreeNode(Integer.parseInt(lV));
+                queue.offer(curNode.left);
+            }
+            String rV = nodes[++cur];
+            if (!"X".equals(rV)) {
+                curNode.right = new TreeNode(Integer.parseInt(rV));
+                queue.offer(curNode.right);
+            }
+        }
         return root;
     }
 }
