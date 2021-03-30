@@ -30,9 +30,10 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TopKFrequentElements{
     public static void main(String[] args) {
@@ -42,10 +43,11 @@ public class TopKFrequentElements{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int n : nums) {
-            map.put(n, map.getOrDefault(n, 0)+1);
-        }
+        Map<Integer, Integer> map = IntStream.of(nums).boxed().collect(Collectors.toMap(e -> e, e -> 1, Integer::sum));
+//        Map<Integer, Integer> map = new HashMap<>();
+//        for (int n : nums) {
+//            map.put(n, map.getOrDefault(n, 0)+1);
+//        }
         PriorityQueue<int[]> pq = new PriorityQueue<>(((o1, o2) -> o2[1]-o1[1]));
         for (int kk : map.keySet()) {
             pq.offer(new int[]{kk, map.get(kk)});
