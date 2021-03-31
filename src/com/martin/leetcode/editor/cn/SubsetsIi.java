@@ -32,27 +32,76 @@ public class SubsetsIi{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] nums) {
+/*    public List<List<Integer>> subsetsWithDup(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
         res.add(new ArrayList<>());
-        dfs(nums, 0, 0, nums.length, new ArrayList<>(), res);
+        dfs(nums, 0, nums.length, new ArrayList<>(), res);
         return res;
     }
 
-    private void dfs(int[] nums, int start, int level, int len, List<Integer> item, List<List<Integer>> res) {
-        if (level == len) {
+    private void dfs(int[] nums, int start, int len, List<Integer> item, List<List<Integer>> res) {
+        if (start == len) {
             return;
         }
-
         for (int i = start; i < len; i++) {
             if (i > start && nums[i] == nums[i-1]) continue;
+
             item.add(nums[i]);
             res.add(new ArrayList<>(item));
-            dfs(nums, i+1, level+1, len, item, res);
+            dfs(nums, i+1, len, item, res);
+            item.remove(item.size()-1);
+        }
+    }*/
+
+/*    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        Set<List<Integer>> res = new HashSet<>();
+        res.add(new ArrayList<>());
+        dfs(nums, 0, nums.length, new ArrayList<>(), res);
+        return new ArrayList<>(res);
+    }
+
+    private void dfs(int[] nums, int start, int len, List<Integer> item, Set<List<Integer>> res) {
+        if (start == len) {
+            res.add(new ArrayList<>(item));
+            return;
+        }
+        item.add(nums[start]);
+        dfs(nums, start+1, len, item, res);
+        item.remove(item.size()-1);
+        dfs(nums, start+1, len, item, res);
+    }*/
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(nums, 0, nums.length, new ArrayList<>(), res);
+        return res;
+    }
+
+    private void dfs(int[] nums, int start, int len, List<Integer> item, List<List<Integer>> res) {
+        if (start == len) {
+            res.add(new ArrayList<>(item));
+            return;
+        }
+        int cnt = 1;
+        while (start+1 < len && nums[start] == nums[start+1]) {
+            cnt++;
+            start++;
+        }
+
+        dfs(nums, start+1, len, item, res);
+
+        for (int i = 1; i <= cnt; i++) {
+            item.add(nums[start]);
+            dfs(nums, start+1, len, item, res);
+        }
+        for (int i = 1; i <= cnt; i++) {
             item.remove(item.size()-1);
         }
     }
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
