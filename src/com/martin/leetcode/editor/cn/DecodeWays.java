@@ -63,13 +63,13 @@ public class DecodeWays{
 
     public static void main(String[] args) {
         Solution solution = new DecodeWays().new Solution();
-        System.out.println(solution.numDecodings("26"));
+        System.out.println(solution.numDecodings("2101"));
     }
 
 
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int numDecodings(String s) {
+/*    public int numDecodings(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
@@ -93,6 +93,24 @@ class Solution {
             }
         }
         return dp[0];
+    }*/
+
+    public int numDecodings(String s) {
+        if (s.startsWith("0")) return 0;
+
+        int len = s.length();
+        s = " " +s;
+        char[] chars = s.toCharArray();
+        int[] dp = new int[len+1];
+        dp[0] = 1;
+        for (int i = 1; i <= len; i++) {
+            if (chars[i] >= '1' && chars[i] <= '9') dp[i] += dp[i-1];
+            if (i > 1) {
+                int t = (chars[i-1] - '0') * 10 + chars[i] - '0';
+                if (t >= 10 && t <= 26) dp[i] += dp[i-2];
+            }
+        }
+        return dp[len];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
