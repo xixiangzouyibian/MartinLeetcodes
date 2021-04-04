@@ -29,40 +29,40 @@ import java.util.List;
 public class ThreeSum{
     public static void main(String[] args) {
        Solution solution = new ThreeSum().new Solution();
-       System.out.println(Arrays.asList(-1, 1).equals(Arrays.asList(-1, 1)));
+        System.out.println(solution.threeSum(new int[] {-1,0,1,2,-1,-4}));
     }
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        int len = nums.length;
         Arrays.sort(nums);
-        List<List<Integer>> ans = new ArrayList<>();
+        int len = nums.length;
+        List<List<Integer>> res = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             if (nums[i] > 0) break;
             if (i > 0 && nums[i] == nums[i-1]) continue;
-            int target = -nums[i];
-            twoSum(nums, i+1, len-1, target, ans);
+            twoSum(nums, i+1, len-1, -nums[i], res);
         }
-        return new ArrayList<>(ans);
+        return res;
     }
 
-    public void twoSum(int[] nums, int start, int end, int target, List<List<Integer>> ans) {
+    private void twoSum(int[] nums, int start, int end, int target, List<List<Integer>> res) {
         while (start < end) {
-            int twoSum = nums[start]+nums[end];
-            if (twoSum == target) {
-                ans.add(Arrays.asList(-target, nums[start], nums[end]));
-                while (start < end && nums[start] == nums[start+1]) start++;
-                while (start < end && nums[end] == nums[end-1]) end--;
+            int sum = nums[start] + nums[end];
+            if (sum == target) {
+                res.add(Arrays.asList(-target, nums[start], nums[end]));
+                while (start + 1 < nums.length && nums[start] == nums[start+1]) start++;
+                while (end - 1 > start && nums[end] == nums[end-1]) end--;
                 start++;
                 end--;
-            } else if (twoSum < target) {
+            } else if (sum < target) {
                 start++;
             } else {
                 end--;
             }
         }
     }
+
 
 /*    public void twoSum(int[] nums, int start, int end, int target, Set<List<Integer>> ans) {
         Map<Integer, Integer> map = new HashMap<>();
