@@ -1,2 +1,2 @@
-# MartinLeetcodes
+# Geek
 Write something for daily practice
