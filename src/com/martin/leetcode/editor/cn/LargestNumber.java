@@ -47,7 +47,6 @@ package com.martin.leetcode.editor.cn;
 
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class LargestNumber{
     public static void main(String[] args) {
@@ -56,7 +55,7 @@ public class LargestNumber{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public String largestNumber(int[] nums) {
+/*    public String largestNumber(int[] nums) {
         StringBuilder sb = new StringBuilder();
 
         for (String s :
@@ -71,6 +70,23 @@ class Solution {
         String result = sb.toString();
 
         return result.startsWith("0") ? "0" : result;
+    }*/
+
+    public String largestNumber(int[] nums) {
+        StringBuilder sb = new StringBuilder();
+        String[] ss = new String[nums.length];
+        int len = nums.length;
+        for (int i = 0; i < len; i++) ss[i] = nums[i] + "";
+
+        Arrays.sort(ss, (o1, o2) -> (o2 + o1).compareTo(o1 + o2));
+
+        for (String s : ss) {
+            sb.append(s);
+        }
+
+        String res = sb.toString();
+
+        return res.startsWith("0") ? "0" : res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
