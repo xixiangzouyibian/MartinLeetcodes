@@ -57,6 +57,7 @@ package com.martin.leetcode.editor.cn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class BoundaryOfBinaryTree{
     public static void main(String[] args) {
@@ -93,7 +94,7 @@ public class BoundaryOfBinaryTree{
  * }
  */
 class Solution {
-    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+/*    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         dfs(root, true, true, res);
         return res;
@@ -115,6 +116,60 @@ class Solution {
         if (!leftBound && rightBound) {
             res.add(node.val);
         }
+    }*/
+
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) return res;
+        if (!isLeaf(root)) res.add(root.val);
+
+        addLeftBound(res, root);
+        addLeaves(res, root);
+        addRightBound(res, root);
+
+        return res;
+    }
+
+    private void addLeftBound(List<Integer> res, TreeNode root) {
+        TreeNode node = root.left;
+        while (node != null && !isLeaf(node)) {
+            res.add(node.val);
+            if (node.left != null) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+    }
+
+    private void addLeaves(List<Integer> res, TreeNode root) {
+        if (root == null) return;
+        if (isLeaf(root)) {
+            res.add(root.val);
+            return;
+        }
+        addLeaves(res, root.left);
+        addLeaves(res, root.right);
+    }
+
+    private void addRightBound(List<Integer> res, TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root.right;
+        while (node != null && !isLeaf(node)) {
+            stack.push(node);
+            if (node.right != null) {
+                node = node.right;
+            } else {
+                node = node.left;
+            }
+        }
+        while (!stack.isEmpty()) {
+            res.add(stack.pop().val);
+        }
+    }
+
+    private boolean isLeaf(TreeNode node) {
+        return node.left == null && node.right == null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
