@@ -48,10 +48,7 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class WordLadder{
     public static void main(String[] args) {
@@ -95,7 +92,7 @@ class Solution {
         }
     }*/
 
-    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+/*    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if (!wordList.contains(endWord)) return 0;
 
         int len = wordList.size();
@@ -136,6 +133,38 @@ class Solution {
         }
 
         return cnt == 1;
+    }*/
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (!wordList.contains(endWord)) return 0;
+
+        Set<String> visit = new HashSet<>();
+        Set<String> dict = new HashSet<>(wordList); // important
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        int res = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String curWord = queue.poll();
+                char[] cc = curWord.toCharArray();
+                for (int j = 0; j < cc.length; j++) {
+                    char backup = cc[j];
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        cc[j] = c;
+                        String rWord = new String(cc);
+                        if (dict.contains(rWord) && !visit.contains(rWord)) {
+                            if (rWord.equals(endWord)) return res+1;
+                            visit.add(rWord);
+                            queue.offer(rWord);
+                        }
+                    }
+                    cc[j] = backup;
+                }
+            }
+            res++;
+        }
+        return 0;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
