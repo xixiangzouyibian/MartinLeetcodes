@@ -52,12 +52,12 @@ package com.martin.leetcode.editor.cn;
 public class ImplementStrstr{
     public static void main(String[] args) {
        Solution solution = new ImplementStrstr().new Solution();
-        System.out.println(solution.strStr("aaaa", "baa"));
+        System.out.println(solution.strStr("aaaa", "aacaa"));
     }
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int strStr(String haystack, String needle) {
+/*    public int strStr(String haystack, String needle) {
         int hl = haystack.length(), nl = needle.length();
         char[] hc = haystack.toCharArray(), nc = needle.toCharArray();
 
@@ -69,6 +69,33 @@ class Solution {
             }
             if (b == nl) return i;
         }
+        return -1;
+    }*/
+
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) return 0;
+
+        int m = haystack.length(), n = needle.length();
+        haystack = " " + haystack;
+        needle = " " + needle;
+        char[] hc = haystack.toCharArray();
+        char[] nc = needle.toCharArray();
+
+        //build next
+        int[] next = new int[n+1];
+        for (int i = 2, j = 0; i <= n; i++) {
+            while (j > 0 && nc[i] != nc[j+1]) j = next[j];
+            if (nc[i] == nc[j+1]) j++;
+            next[i] = j;
+        }
+
+        //kmp
+        for (int i = 1, j = 0; i <= m; i++) {
+            while (j > 0 && hc[i] != nc[j+1]) j = next[j];
+            if (hc[i] == nc[j+1]) j++;
+            if (j == n) return i - n;
+        }
+
         return -1;
     }
 }
