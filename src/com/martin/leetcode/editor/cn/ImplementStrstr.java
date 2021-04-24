@@ -84,7 +84,7 @@ class Solution {
         //build next
         int[] next = new int[n+1];
         for (int i = 2, j = 0; i <= n; i++) {
-            while (j > 0 && nc[i] != nc[j+1]) j = next[j];
+            while (j > 0 && nc[i] != nc[j+1]) j = next[j]; // 将j指向上一次的前缀的位置
             if (nc[i] == nc[j+1]) j++;
             next[i] = j;
         }
