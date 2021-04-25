@@ -58,7 +58,8 @@ public class BinaryTreePostorderTraversal{
  * }
  */
 class Solution {
-    public List<Integer> postorderTraversal(TreeNode root) {
+
+/*    public List<Integer> postorderTraversal(TreeNode root) {
         Stack<TreeNode> stack = new Stack<>();
         List<Integer> res = new ArrayList<>();
 
@@ -70,6 +71,26 @@ class Solution {
             } else {
                 TreeNode node = stack.pop();
                 root = node.left;
+            }
+        }
+        return res;
+    }*/
+
+    // 左 -> 右 -> 根
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) return res;
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
+            res.add(0, cur.val);
+            if (cur.left != null) {
+                stack.push(cur.left);
+            }
+            if (cur.right != null) {
+                stack.push(cur.right);
             }
         }
         return res;
