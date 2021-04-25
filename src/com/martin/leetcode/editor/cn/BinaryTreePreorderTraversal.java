@@ -95,7 +95,7 @@ public class BinaryTreePreorderTraversal{
  * }
  */
 class Solution {
-    // 根 -> 左 -> 右
+    // 根 -> 左 -> 右 => 右 -> 左 -> 根
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if (root == null) return res;
