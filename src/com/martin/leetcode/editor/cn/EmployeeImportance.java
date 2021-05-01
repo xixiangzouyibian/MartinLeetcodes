@@ -33,8 +33,10 @@
 package com.martin.leetcode.editor.cn;
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -60,7 +62,10 @@ class Employee {
 */
 
 class Solution {
-    public int getImportance(List<Employee> employees, int id) {
+    /**
+     * DFS
+     */
+/*    public int getImportance(List<Employee> employees, int id) {
         Map<Integer, Employee> map = employees.stream().collect(Collectors.toMap(e -> e.id, Function.identity()));
         return dfs(id, map);
     }
@@ -73,6 +78,25 @@ class Solution {
         sum += target.importance;
         for (int n : target.subordinates) {
             sum += dfs(n, map);
+        }
+        return sum;
+    }*/
+
+    /**
+     * BFS
+     */
+    public int getImportance(List<Employee> employees, int id) {
+        Map<Integer, Employee> map = employees.stream().collect(Collectors.toMap(e -> e.id, Function.identity()));
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(id);
+        int sum = 0;
+        while (!queue.isEmpty()) {
+            int curId = queue.poll();
+            Employee employee = map.get(curId);
+            sum += employee.importance;
+            for (int nextId : employee.subordinates) {
+                queue.offer(nextId);
+            }
         }
         return sum;
     }
