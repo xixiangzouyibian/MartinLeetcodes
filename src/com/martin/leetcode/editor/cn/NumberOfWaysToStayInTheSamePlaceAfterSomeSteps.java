@@ -58,7 +58,25 @@ public class NumberOfWaysToStayInTheSamePlaceAfterSomeSteps{
 class Solution {
     int mod = (int) (1e9 + 7);
 
-/*    public int numWays(int steps, int arrLen) {
+        /**
+         *      The right order:
+         * 		i, j, dp[i][j]: 201
+         * 		i, j, dp[i][j]: 211
+         * 		i, j, dp[i][j]: 102
+         * 		i, j, dp[i][j]: 112
+         * 		i, j, dp[i][j]: 004
+         * 		i, j, dp[i][j]: 014
+         *
+         *      The wrong order:
+         * 		i, j, dp[i][j]: 201
+         * 		i, j, dp[i][j]: 101
+         * 		i, j, dp[i][j]: 001
+         * 		i, j, dp[i][j]: 211
+         * 		i, j, dp[i][j]: 112
+         * 		i, j, dp[i][j]: 013
+         *
+         */
+    public int numWays(int steps, int arrLen) {
         int max = Math.min(steps / 2, arrLen - 1);
         int[][] dp = new int[steps+1][max+1];
         dp[steps][0] = 1;
@@ -67,12 +85,13 @@ class Solution {
                 dp[i][j] = (dp[i][j] + dp[i+1][j]) % mod;
                 if (j <= max -1 ) dp[i][j] = (dp[i][j] + dp[i+1][j+1]) % mod;
                 if (j > 0) dp[i][j] = (dp[i][j] + dp[i+1][j-1]) % mod;
+                System.out.println("i, j, dp[i][j]: " + i + j + dp[i][j]);
             }
         }
         return dp[0][0];
-    }*/
+    }
 
-    public int numWays(int steps, int arrLen) {
+/*    public int numWays(int steps, int arrLen) {
         int max = Math.min(steps / 2, arrLen - 1);
         int[][] dp = new int[steps+1][max+1];
         dp[steps][0] = 1;
@@ -86,7 +105,7 @@ class Solution {
             }
         }
         return dp[0][0];
-    }
+    }*/
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
