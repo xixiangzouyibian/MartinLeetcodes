@@ -68,7 +68,7 @@ public class CountTripletsThatCanFormTwoArraysOfEqualXor{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int countTriplets(int[] arr) {
+/*    public int countTriplets(int[] arr) {
         int len = arr.length;
         int[] pre = new int[len+1];
         for (int i = 0; i < len; i++) {
@@ -83,6 +83,23 @@ class Solution {
                     int b = pre[k+1] ^ pre[j];
                     if (a == b) res++;
                 }
+            }
+        }
+
+        return res;
+    }*/
+
+    public int countTriplets(int[] arr) {
+        int len = arr.length;
+        int[] pre = new int[len+1];
+        for (int i = 0; i < len; i++) {
+            pre[i+1] = pre[i] ^ arr[i];
+        }
+
+        int res = 0;
+        for (int i = 0; i < len - 1; i++) {
+            for (int k = i+1; k < len; k++) {
+                if ((pre[k+1] ^ pre[i]) == 0) res += k - i;
             }
         }
 
