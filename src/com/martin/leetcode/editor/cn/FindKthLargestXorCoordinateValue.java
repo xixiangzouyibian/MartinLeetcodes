@@ -59,37 +59,42 @@ public class FindKthLargestXorCoordinateValue{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    int limit;
+    PriorityQueue<Integer> queue;
+
     public int kthLargestValue(int[][] matrix, int k) {
+        queue = new PriorityQueue<>();
+        limit = k;
         int m = matrix.length, n = matrix[0].length;
         int[][] pre = new int[m][n];
 
-        PriorityQueue<Integer> queue =
-                new PriorityQueue<>((o1, o2) -> o2 - o1);
         pre[0][0] = matrix[0][0];
-        queue.offer(pre[0][0]);
+        offer(pre[0][0]);
 
         for (int j = 1; j < n; j++) {
             pre[0][j] = pre[0][j-1] ^ matrix[0][j];
-            queue.offer(pre[0][j]);
+            offer(pre[0][j]);
         }
 
         for (int i = 1; i < m; i++) {
             pre[i][0] = pre[i-1][0] ^ matrix[i][0];
-            queue.offer(pre[i][0]);
+            offer(pre[i][0]);
         }
 
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
                 pre[i][j] = pre[i-1][j] ^ pre[i][j-1] ^ pre[i-1][j-1] ^ matrix[i][j];
-                queue.offer(pre[i][j]);
+                offer(pre[i][j]);
             }
         }
+        return queue.peek();
+    }
 
-        while (--k > 0) {
+    private void offer(int val) {
+        queue.add(val);
+        if (queue.size() > limit) {
             queue.poll();
         }
-
-        return queue.peek();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
