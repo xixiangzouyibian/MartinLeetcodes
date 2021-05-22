@@ -41,6 +41,12 @@ public class ChalkboardXorGame{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+        /**
+         * Consider:
+         * 1. if s = 0
+         * 2. if s != 0 && len % 2 == 0
+         * 3. if s != 0 && len % 2 == 1
+         */
     public boolean xorGame(int[] nums) {
         if ((nums.length & 1) == 0) return true;
 
