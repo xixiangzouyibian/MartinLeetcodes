@@ -76,6 +76,17 @@ class Solution {
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & -n) == n;
     }
+
+    //calculate a ^ k % p
+    public long qmi(int a, int k, int p) {
+        long res = 1;
+        while (k > 0) {
+            if ((k & 1) == 1) res = res * a % p;
+            k = k >> 1;
+            a = a * a % p;
+        }
+        return res;
+    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
