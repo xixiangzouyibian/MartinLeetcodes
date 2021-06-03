@@ -42,7 +42,7 @@ public class ContiguousArray{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int findMaxLength(int[] nums) {
+/*    public int findMaxLength(int[] nums) {
         int len = nums.length;
         int[] pre = new int[len+1];
         for (int i = 0; i < len; i++) pre[i+1] = pre[i] + (nums[i] == 1 ? 1 : -1);
@@ -53,6 +53,27 @@ class Solution {
             if (!map.containsKey(pre[i-2])) map.put(pre[i-2], i-2);
             if (map.containsKey(pre[i]))
                 res = Math.max(res, i - map.get(pre[i]));
+        }
+
+        return res;
+    }*/
+
+    public int findMaxLength(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        int res = 0;
+        for (int i = 1, zero = 0, one = 0; i <= nums.length; i++) {
+            if (nums[i-1] == 0) {
+                zero++;
+            } else {
+                one++;
+            }
+            int diff = one - zero;
+            if (map.containsKey(diff)) {
+                res = Math.max(res, i - map.get(diff));
+            } else {
+                map.put(diff, i);
+            }
         }
 
         return res;
