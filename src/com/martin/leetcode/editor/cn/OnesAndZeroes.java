@@ -43,10 +43,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 public class OnesAndZeroes{
     public static void main(String[] args) {
        Solution solution = new OnesAndZeroes().new Solution();
@@ -57,7 +53,32 @@ public class OnesAndZeroes{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    int[][][] mem;
+    public int findMaxForm(String[] strs, int m, int n) {
+        int len = strs.length;
+        int[][][] dp = new int [len+1][m+1][n+1];
+
+        for (int i = 1; i <= len; i++) {
+            int[] count = count01(strs[i-1]);
+            for (int j = 0; j <= m; j++) {
+                for (int k = 0; k <= n; k++) {
+                    dp[i][j][k] = dp[i-1][j][k];
+                    if (j >= count[0] && k >= count[1])
+                        dp[i][j][k] = Math.max(dp[i][j][k], 1 + dp[i-1][j-count[0]][k-count[1]]);
+                }
+            }
+        }
+        return dp[len][m][n];
+    }
+
+    private int[] count01(String str) {
+        int[] res = new int[2];
+        for (char c : str.toCharArray()) {
+            res[c-'0']++;
+        }
+        return res;
+    }
+
+/*    int[][][] mem;
 
     public int findMaxForm(String[] strs, int m, int n) {
         int len = strs.length;
@@ -91,11 +112,11 @@ class Solution {
             mem[start][m][n] = Math.max(dfs(map, start-1, m, n),
                     1 + dfs(map, start-1, m - info[0], n - info[1]));
         } else {
-            mem[start][m][n] =  dfs(map, start-1, m, n);
+            mem[start][m][n] = dfs(map, start-1, m, n);
         }
 
         return mem[start][m][n];
-    }
+    }*/
 
 /*    int res = 0;
     private void dfs(Map<Integer, int[]> map, int[] record, int start, int m, int n) {
