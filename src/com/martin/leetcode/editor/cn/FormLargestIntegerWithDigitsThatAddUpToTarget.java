@@ -70,8 +70,6 @@
 package com.martin.leetcode.editor.cn;
 
 
-import java.util.Arrays;
-
 public class FormLargestIntegerWithDigitsThatAddUpToTarget{
     public static void main(String[] args) {
        Solution solution = new FormLargestIntegerWithDigitsThatAddUpToTarget().new Solution();
@@ -80,7 +78,7 @@ public class FormLargestIntegerWithDigitsThatAddUpToTarget{
     
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public String largestNumber(int[] cost, int target) {
+/*    public String largestNumber(int[] cost, int target) {
         int[] dp = new int[target+1];
         Arrays.fill(dp, Integer.MIN_VALUE);
         dp[0] = 0;
@@ -102,6 +100,41 @@ class Solution {
         }
 
         return res;
+    }*/
+
+    public String largestNumber(int[] cost, int target) {
+        String[][] dp = new String[10][target+1];
+        dp[0][0] = "";
+        for (int i = 1; i <= 9; i++) {
+            for (int j = 0; j <= target; j++) {
+                dp[i][j] = dp[i-1][j];
+                if (j >= cost[i-1] && dp[i][j-cost[i-1]] != null) {
+                    String updated = i + dp[i][j-cost[i-1]];
+                    if (compare(dp[i][j], updated)) {
+                        dp[i][j] = updated;
+                    }
+                }
+            }
+        }
+        return dp[9][target] == null ? "0" : dp[9][target];
+    }
+
+        /**
+         * compare if s2 > s1
+         */
+    private boolean compare(String s1, String s2) {
+        if (s1 == null) return true;
+        if (s2 == null) return false;
+
+        int l1 = s1.length();
+        int l2 = s2.length();
+        if (l1 != l2) return l2 > l1;
+
+        for (int i = 0; i < l1; i++) {
+            if (s2.charAt(i) > s1.charAt(i)) return true;
+        }
+
+        return false;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
