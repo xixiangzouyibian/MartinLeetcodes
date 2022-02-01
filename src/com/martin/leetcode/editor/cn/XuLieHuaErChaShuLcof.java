@@ -4,7 +4,9 @@
   
 package com.martin.leetcode.editor.cn;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class XuLieHuaErChaShuLcof{
@@ -24,20 +26,21 @@ public class Codec {
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         if (root == null) return "";
-        LinkedList<String> list = new LinkedList<>();
+
         Queue<TreeNode> queue = new LinkedList<>();
+        List<String> record = new ArrayList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
-            if (node != null) {
-                list.add(String.valueOf(node.val));
-                queue.add(node.left);
-                queue.add(node.right);
+            if (node == null) {
+                record.add(NVL);
             } else {
-                list.add(NVL);
+                record.add(String.valueOf(node.val));
+                queue.offer(node.left);
+                queue.offer(node.right);
             }
         }
-        return String.join(",", list);
+        return String.join(",", record);
     }
 
     // Decodes your encoded data to tree.
@@ -46,21 +49,18 @@ public class Codec {
         String[] dd = data.split(",");
         TreeNode root = new TreeNode(Integer.parseInt(dd[0]));
         Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
-
-        int i = 1;
+        queue.offer(root);
+        int i = 0;
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
-            if (!dd[i].equals(NVL)) {
+            if (!dd[++i].equals(NVL)) {
                 node.left = new TreeNode(Integer.parseInt(dd[i]));
-                queue.add(node.left);
+                queue.offer(node.left);
             }
-            i++;
-            if (!dd[i].equals(NVL)) {
+            if (!dd[++i].equals(NVL)) {
                 node.right = new TreeNode(Integer.parseInt(dd[i]));
-                queue.add(node.right);
+                queue.offer(node.right);
             }
-            i++;
         }
         return root;
     }
